@@ -8,11 +8,11 @@ action = sys.argv[1]
 print(f"Action ->", {action})
 
 payload = " ".join(sys.argv[2:])
-print("Payload is", payload)
+print("Payload is", payload or None)
 
 with open("data.txt", "r") as file:
     data = json.load(file)
-
+'''
 def read_name(data):
     print(data["name"])
 
@@ -20,16 +20,16 @@ def read_age():
     with open("data.txt", "r") as file:
         data = json.load(file)
     print(data["age"])
+'''
 
+'''
 def change_name(data,new):
     data["name"] = new
     with open("data.txt", "w") as file:
         json.dump(data,file)
 
+'''
 
-
-
-#change_name(data,"SH")
 def add_task(data,payload):
     ids = []
     if data:
@@ -65,12 +65,17 @@ if action == "add":
     add_task(data,payload)
     print("task added successfully")
 elif action == "list":
-    if sys.argv[2] == "done":
-        print([items for items in data if items.get("status")== "done"] or None)
+    if len(sys.argv) > 2:
+        if sys.argv[2] == "done":
+            print([items for items in data if items.get("status")== "done"] or None)
+        elif sys.argv[2] == "not done":
+            print([items for items in data if items.get("status")== "not done"] or None)
     else:
-        print([items for items in data if items.get("status")== "not done"] or None)
+        for item in data:
+            print(item)
 elif action == "delete":
     delete_tasks(data,payload)
+
     
 
 
