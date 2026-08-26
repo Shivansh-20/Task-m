@@ -46,11 +46,32 @@ def add_task(data,payload):
     with open("data.txt" , "w") as file:
         json.dump(data, file, indent = 4)
 
+def delete_tasks(data,payload):
+    task_id = int(payload)
+    for i, item in enumerate(data):
+        if item["id"] == task_id:
+            data.pop(i)
+            print("deleted successfully")
+            break
+        else:
+            print("Task not found")
+
+    with open("data.txt", "w") as file:
+        json.dump(data,file,indent=4)
+
+
+
 if action == "add":
     add_task(data,payload)
-if action == "printd":
+    print("task added successfully")
+elif action == "list":
+    if sys.argv[2] == "done":
+        print([items for items in data if items.get("status")== "done"] or None)
+    else:
+        print([items for items in data if items.get("status")== "not done"] or None)
+elif action == "delete":
+    delete_tasks(data,payload)
     
-    print([items for items in data if items.get("status")==" not done"] or None)
 
 
  

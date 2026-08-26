@@ -2,11 +2,5 @@
     {
         "id": 1,
         "task": "Buy groceries"
-    },
-    {
-        "id": 2,
-        "task": "eating food",
-        "created at": "2026-08-26T12:49:36.296886",
-        "status": "done"
     }
 ]
