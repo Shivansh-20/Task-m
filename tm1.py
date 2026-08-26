@@ -1,5 +1,6 @@
 import sys
 import json
+from datetime import datetime
 
 
 action = sys.argv[1]
@@ -37,7 +38,9 @@ def add_task(data,payload):
     else: new_id = 1
     new_task = {
         "id":new_id,
-        "task":payload
+        "task":payload,
+        "created at":datetime.now().isoformat(),
+        "status": "not done"
     }
     data.append(new_task)
     with open("data.txt" , "w") as file:
@@ -45,5 +48,9 @@ def add_task(data,payload):
 
 if action == "add":
     add_task(data,payload)
+if action == "printd":
+    
+    print([items for items in data if items.get("status")==" not done"] or None)
 
 
+ 
