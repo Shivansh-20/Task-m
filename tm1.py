@@ -1,14 +1,14 @@
 import sys
 import json
-'''print(sys.argv)
+
 
 action = sys.argv[1]
-payload = sys.argv[2]
+#payload = sys.argv[2]
 print(f"Action ->", {action})
+
+payload = " ".join(sys.argv[2:])
 print("Payload is", payload)
 
-#payload = " ".join(sys.argv[2:])
-'''
 with open("data.txt", "r") as file:
     data = json.load(file)
 
@@ -26,9 +26,24 @@ def change_name(data,new):
         json.dump(data,file)
 
 
-change_name(data,"SH")
 
 
+#change_name(data,"SH")
+def add_task(data,payload):
+    ids = []
+    if data:
+        max_id = max(item['id']for item in data)
+        new_id = max_id + 1
+    else: new_id = 1
+    new_task = {
+        "id":new_id,
+        "task":payload
+    }
+    data.append(new_task)
+    with open("data.txt" , "w") as file:
+        json.dump(data, file, indent = 4)
 
+if action == "add":
+    add_task(data,payload)
 
 
