@@ -31,7 +31,6 @@ def change_name(data,new):
 '''
 
 def add_task(data,payload):
-    ids = []
     if data:
         max_id = max(item['id']for item in data)
         new_id = max_id + 1
