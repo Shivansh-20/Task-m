@@ -5,9 +5,9 @@ cursor.execute("""
 CREATE TABLE IF NOT EXISTS portfolio(
 ticker TEXT,
 quantity INT,
-average_buyprice REAL
+average_buyprice REAL  #like float
 )
 """
 )
-connection.commit()
+connection.commit() #can use with for automatic but not good practise
 connection.close()
