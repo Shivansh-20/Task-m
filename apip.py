@@ -1,4 +1,5 @@
 import sqlite3
+from pydantic import BaseModel
 connection = sqlite3.connect("trading.db")
 cursor = connection.cursor()
 
@@ -17,3 +18,6 @@ prices = {
     "INFO":3000,
     "HCL":2800
 }
+class Trade(BaseModel):
+    ticker: str
+    quantity: int
