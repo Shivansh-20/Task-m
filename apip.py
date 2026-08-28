@@ -33,10 +33,10 @@ def trade_stock(trade:Trade):
     price = prices[ticker] #store the value in price from dict price of company in ticker
 
 
-cursor.execute(
-    "Select qauntity from portfolio where ticker = ?",
+    cursor.execute(
+        "Select qauntity from portfolio where ticker = ?",
     (ticker,)
 )
-row = cursor.fetchone
+    row = cursor.fetchone
 
 
