@@ -37,6 +37,6 @@ cursor.execute(
     "Select qauntity from portfolio where ticker = ?",
     (ticker,)
 )
-
+row = cursor.fetchone
 
 
