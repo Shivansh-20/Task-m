@@ -31,7 +31,7 @@ def trade_stock(trade:Trade):
     ticker = trade.ticker
     quantity = trade.quantity
     price = prices[ticker] #store the value in price from dict price of company in ticker
-
+    total = quantity * price 
 
     cursor.execute(
         "Select qauntity from portfolio where ticker = ?",
@@ -48,6 +48,23 @@ def trade_stock(trade:Trade):
         )
     else:
         new_quantity = row[0] + quantity
+        cursor.execute(
+        """ 
+             update portfolio
+             set quantity = ?
+             where ticker = ?
+        """,
+        (new_quantity,ticker)
+        )
+    connection.commit()
+    connection.close()
+    return {                            #why not ()
+        "ticker": ticker,
+        "quantity_bought": quantity,
+        "price":price,
+        "total":total
+    } 
 
+    
 
 
