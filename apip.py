@@ -38,5 +38,16 @@ def trade_stock(trade:Trade):
     (ticker,)
 )
     row = cursor.fetchone
+    if row is None:
+        cursor.execute(
+        """
+            insert into portfolio (ticker,quantity,average_price)
+            values(?,?,?)
+        """,
+        (ticker,quantity,price)
+        )
+    else:
+        new_quantity = row[0] + quantity
+
 
 
