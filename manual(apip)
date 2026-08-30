@@ -266,7 +266,7 @@ Type hints alone generally don't perform runtime validation. Pydantic uses type 
 Dataclasses primarily provide a convenient way to create structured Python objects, whereas Pydantic additionally provides runtime validation, parsing, and serialization, which makes it particularly useful at API boundaries.
 
 
-SQLite can handle surprisingly large databases. The limitation is often not the database size, but how many users/processes need to access it simultaneously.SQLite allows many readers, but writes are serialized—effectively, only one writer can modify the database at a tim
+SQLite can handle surprisingly large databases. The limitation is often not the database size, but how many users/processes need to access it simultaneously.SQLite allows many readers, but writes are serialized—effectively, only one writer can modify the database at a time
 
 
 
