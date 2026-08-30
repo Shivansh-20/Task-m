@@ -1,0 +1,147 @@
+ # workflow
+Request
+  ↓
+"TCS", 10
+  ↓
+Look up TCS price
+  ↓
+3900
+  ↓
+10 × 3900 = 39000
+  ↓
+Does TCS already exist in portfolio?
+  ↓
+ ┌───────────────┴───────────────┐
+ NO                              YES
+ ↓                                ↓
+INSERT                         UPDATE
+new row                     existing quantity
+
+
+
+#Pyndatic
+"Python type hints describe the expected type, but they don't normally enforce runtime validation. Pydantic uses those type annotations to parse and validate actual data at runtime.
+
+You can use Pydantic for output as well.
+
+For example:
+
+class TradeResponse(BaseModel):
+    ticker: str
+    quantity_bought: int
+    price: float
+    total: float
+
+Then:
+
+@app.post("/trade", response_model=TradeResponse)
+def trade_stock(trade: Trade):
+    ...
+
+Now you've defined both sides:
+
+             API
+
+Request                  Response
+   ↓                         ↑
+Trade model             TradeResponse
+   ↓                         ↑
+validate input          validate output
+
+This helps ensure your API has a predictable contract.
+
+
+trade: Trade
+
+ understands:
+
+The request body should be validated using the Trade Pydantic model.
+--------------------------------------
+A dataclass:
+
+from dataclasses import dataclass
+
+@dataclass
+class Trade:
+    ticker: str
+    quantity: int
+
+is primarily useful for creating structured Python objects.
+
+It does not provide the same level of runtime data parsing and validation that Pydantic provides.
+
+dataclass
+→ structured Python object
+
+Pydantic
+→ structured + parsing + validation + serialization
+
+Pydantic can convert models back into dictionaries/JSON-friendly representations.
+
+For example:
+
+trade = Trade(ticker="TCS", quantity=10)
+
+You can get a dictionary representation.
+
+In Pydantic v2:
+
+trade.model_dump()
+
+gives approximately:
+
+{
+    "ticker": "TCS",
+    "quantity": 10
+}
+
+And:
+
+trade.model_dump_json()
+
+gives JSON.
+
+So you have:
+
+JSON
+ ↓
+Pydantic
+ ↓
+Python model
+ ↓
+Pydantic
+ ↓
+dict / JSON
+
+This is why Pydantic fits so naturally between APIs and Python code.
+
+
+
+#VIVA
+The "one session" interview cheat sheet
+
+If the interviewer asks "What is Pydantic?", say:
+
+Pydantic is a Python library used for data parsing and runtime validation based on Python type annotations. In FastAPI, it is commonly used to define request and response schemas. It validates incoming data, converts compatible values when appropriate, and provides structured validation errors.
+
+If they ask "Why FastAPI uses it?"
+
+It allows us to define the expected API schema as a Python model, and FastAPI uses that model to validate request bodies and generate API documentation automatically.
+
+"What is BaseModel?"
+
+BaseModel is Pydantic's base class. By inheriting from it, our class gets Pydantic's parsing, validation, and serialization behavior.
+
+"Pydantic vs type hints?"
+
+Type hints alone generally don't perform runtime validation. Pydantic uses type hints as the basis for runtime parsing and validation.
+
+"Pydantic vs dataclass?"
+
+Dataclasses primarily provide a convenient way to create structured Python objects, whereas Pydantic additionally provides runtime validation, parsing, and serialization, which makes it particularly useful at API boundaries.
+
+
+SQLite can handle surprisingly large databases. The limitation is often not the database size, but how many users/processes need to access it simultaneously.SQLite allows many readers, but writes are serialized—effectively, only one writer can modify the database at a tim
+
+
+
