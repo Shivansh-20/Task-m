@@ -13,7 +13,7 @@ average_buyprice REAL      -- like float , -- -> sql comment, #-> for python
 )
 """
 )
-connection.commit() #can use with for automatic but not good practise
+connection.commit() #can use "with" for automatic resource free, but not good practise here 
 connection.close()
 prices = {
     "TCS":3900,
@@ -74,5 +74,13 @@ def get_portfolio():
 
     cursor.execute("select from portfolio")
     rows = cursor.fetchall()
-    
+    connection.close()
+
+    stocks = []
+    total_value = 0
+    for row in rows:
+        ticker,quantity,average_buyprice = row
+        current_price = prices[ticker]
+        value = quantity * current_price
+
 
