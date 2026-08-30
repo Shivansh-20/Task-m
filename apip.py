@@ -67,5 +67,12 @@ def trade_stock(trade:Trade):
     } 
 
     
+@app.get("/portfolio")
+def get_portfolio():
+    connection = sqlite3.connect("training.db")
+    cursor = connection.cursor()
 
+    cursor.execute("select from portfolio")
+    rows = cursor.fetchall()
+    
 
