@@ -59,7 +59,7 @@ def trade_stock(trade:Trade):
         )
     connection.commit()
     connection.close()
-    return {                            #why not ()
+    return {                            
         "ticker": ticker,
         "quantity_bought": quantity,
         "price":price,
