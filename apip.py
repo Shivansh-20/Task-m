@@ -38,7 +38,7 @@ def trade_stock(trade:Trade):
         "Select qauntity from portfolio where ticker = ?",
     (ticker,)
 )
-    row = cursor.fetchone()
+    row = cursor.fetchone()  #() are imp , to actually call the function
     if row is None:
         cursor.execute(
         """
