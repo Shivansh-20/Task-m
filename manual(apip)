@@ -254,6 +254,14 @@ UPDATE only changes the quantity here. If you later buy the same stock at a diff
 a proper portfolio system would need to recalculate the weighted average buy price rather than leaving it at 
 the original price. For this exercise, keeping the mock price as the average is fine.
 
+
+#app.get 
+cursor.execute() = ask the database to perform a SQL operation.
+fetchone() / fetchall() = retrieve results when the operation produces rows.
+connection.commit() = permanently save a transaction's changes.
+
+And SELECT normally doesn't need commit() because you're looking, not changing so no commit here
+
 #VIVA
 The "one session" interview cheat sheet
 
