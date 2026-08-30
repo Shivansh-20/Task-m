@@ -83,4 +83,18 @@ def get_portfolio():
         current_price = prices[ticker]
         value = quantity * current_price
 
+        stocks.append({
+            "ticker":ticker,
+            "quantity":quantity,
+            "current_value":current_price,
+            "value":value
+        })
+        total_value += value
+    return {
+        "stocks":stocks,
+        "total_value":value
+    }
+#The endpoint says "total mock portfolio value",
+#  so we're calculating based on the current mock price, not avg_buy_price
+
 
