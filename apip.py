@@ -9,7 +9,7 @@ cursor.execute("""
 CREATE TABLE IF NOT EXISTS portfolio(
 ticker TEXT,
 quantity INT,
-average_buyprice REAL  #like float
+average_buyprice REAL      -- like float , -- -> sql comment, #-> for python
 )
 """
 )
