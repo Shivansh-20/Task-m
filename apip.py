@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from fastapi import FastAPI
 connection = sqlite3.connect("trading.db")
 cursor = connection.cursor()
-
+#://github.com/Shivansh-20/Task-m/blame/main/manual(apip)#L1-L20
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS portfolio(
 ticker TEXT,
