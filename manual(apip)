@@ -1,4 +1,30 @@
- # workflow
+#architecture        
+                    USER / CLIENT
+                          │
+                          │ HTTP request
+                          ↓
+                    ┌───────────┐
+                    │  FastAPI  │
+                    └─────┬─────┘
+                          │
+              ┌───────────┴───────────┐
+              ↓                       ↓
+         POST /trade             GET /portfolio
+              │                       │
+              ↓                       ↓
+        Pydantic validates       SQLite SELECT
+              │                       │
+              ↓                       ↓
+        Mock stock price         Get all holdings
+              │                       │
+              ↓                       ↓
+       INSERT / UPDATE           Calculate values
+              │                       │
+              └───────────┬───────────┘
+                          ↓
+                     trading.db
+
+# workflow
 Request
   ↓
 "TCS", 10
