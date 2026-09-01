@@ -8,6 +8,7 @@ app = FastAPI()
 # 2. MOCK STOCK PRICES 
 
 prices = {
+    "RELIANCE": 2900,
     "TCS":3900,
     "INFY":3000,
     "HCL":2800
@@ -107,11 +108,14 @@ def get_portfolio():
     cursor.execute("select * from portfolio")
     rows = cursor.fetchall()
     connection.close()
-
+    # Store formatted stocks
     stocks = []
+    # Total portfolio value
     total_value = 0
+    # Process every database row
     for row in rows:
         ticker,quantity,average_buyprice = row
+        # Current mock market price
         current_price = prices[ticker]
         value = quantity * current_price
 
