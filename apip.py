@@ -66,7 +66,7 @@ def trade_stock(trade:Trade):
     if row is None:
         cursor.execute(
         """
-            insert into portfolio (ticker,quantity,average_price)
+            insert into portfolio (ticker,quantity,average_buyprice)
             values(?,?,?)
         """,
         (ticker,quantity,price)
@@ -83,7 +83,7 @@ def trade_stock(trade:Trade):
         cursor.execute(
         """ 
              update portfolio
-             set quantity = ?
+             set quantity = ?,
              average_buyprice = ?
              where ticker = ?
         """,
@@ -126,10 +126,10 @@ def get_portfolio():
             "current_price":current_price,
             "value":value
         })
-        total_value += total_value
+        total_value += value
     return {
         "stocks":stocks,
-        "total_value":value
+        "total_value":total_value
     }
 #The endpoint says "total mock portfolio value",
 #  so we're calculating based on the current mock price, not avg_buy_price
