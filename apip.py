@@ -82,6 +82,7 @@ def trade_stock(trade:Trade):
         )
     connection.commit()
     connection.close()
+    # Send JSON response
     return {                            
         "ticker": ticker,
         "quantity_bought": quantity,
@@ -89,13 +90,13 @@ def trade_stock(trade:Trade):
         "total":total
     } 
 
-    
+# 6. GET /portfolio
 @app.get("/portfolio")
 def get_portfolio():
     connection = sqlite3.connect("training.db")
     cursor = connection.cursor()
-
-    cursor.execute("select from portfolio")
+    # Get every row
+    cursor.execute(""select * from portfolio"")
     rows = cursor.fetchall()
     connection.close()
 
