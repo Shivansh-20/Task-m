@@ -74,7 +74,7 @@ def trade_stock(trade:Trade):
         # STOCK ALREADY EXISTS → UPDATE
     else:
         old_quantity = row[0]
-        old_avg_price = row[1]
+        old_avg_price = row[1]  #average_buyprice
         new_quantity = old_quantity + quantity
         new_avg_price = (
     (old_quantity * old_avg_price)
