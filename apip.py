@@ -16,6 +16,8 @@ average_buyprice REAL      -- like float , -- -> sql comment, #-> for python
 
 connection.commit() #can use "with" for automatic resource free, but not good practise here 
 connection.close()
+# 2. MOCK STOCK PRICES 
+ # --------------------------------------------------
 prices = {
     "TCS":3900,
     "INFO":3000,
