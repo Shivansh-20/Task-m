@@ -1,6 +1,6 @@
 import sqlite3
-from pydantic import BaseModel
-from fastapi import FastAPI,
+from pydantic import BaseModel, Field
+from fastapi import FastAPI, HTTPException
 
 # 1. CREATE FASTAPI APPLICATION
 app = FastAPI()
@@ -17,7 +17,7 @@ prices = {
 #pydantic basemodel
 class Trade(BaseModel):
     ticker: str
-    quantity: int
+    quantity: int = Field(gt= 0)
 
 #initiliaze database
 def initialiaze_database():
@@ -25,7 +25,7 @@ def initialiaze_database():
     cursor = connection.cursor()
     cursor.execute("""
 CREATE TABLE IF NOT EXISTS portfolio(
-ticker TEXT,
+ticker TEXT PRIMARY KEY,
 quantity INT,
 average_buyprice REAL      -- like float , -- -> sql comment, #-> for python
 )
@@ -40,7 +40,7 @@ initialiaze_database()
 # 5. POST /trade
 @app.post("/trade")
 def trade_stock(trade:Trade):
-    ticker = trade.ticker
+    ticker = trade.ticker.upper()
     quantity = trade.quantity
     # Check whether stock exists in our mock prices
     if ticker not in prices: 
@@ -57,7 +57,7 @@ def trade_stock(trade:Trade):
 
 # Check whether we already own this stock
     cursor.execute(
-        "Select qauntity from portfolio where ticker = ?",
+        "Select quantity,average_buyprice from portfolio where ticker = ?",
     (ticker,)
 )
     row = cursor.fetchone()  #() are imp , to actually call the function
@@ -72,7 +72,11 @@ def trade_stock(trade:Trade):
         )
         # STOCK ALREADY EXISTS → UPDATE
     else:
-        new_quantity = row[0] + quantity
+        new_quantity =  + quantity
+        new_avg_price = (
+    (old_quantity * old_avg_price)
+    + (quantity * price)
+) / new_quantity
         cursor.execute(
         """ 
              update portfolio
@@ -94,10 +98,10 @@ def trade_stock(trade:Trade):
 # 6. GET /portfolio
 @app.get("/portfolio")
 def get_portfolio():
-    connection = sqlite3.connect("training.db")
+    connection = sqlite3.connect("trading.db")
     cursor = connection.cursor()
     # Get every row
-    cursor.execute(""select * from portfolio"")
+    cursor.execute("select * from portfolio")
     rows = cursor.fetchall()
     connection.close()
 
