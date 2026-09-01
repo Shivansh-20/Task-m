@@ -1,6 +1,6 @@
 import sqlite3
 from pydantic import BaseModel
-from fastapi import FastAPI
+from fastapi import FastAPI,
 
 # 1. CREATE FASTAPI APPLICATION
 app = FastAPI()
@@ -9,7 +9,7 @@ app = FastAPI()
 
 prices = {
     "TCS":3900,
-    "INFO":3000,
+    "INFY":3000,
     "HCL":2800
 }
 
