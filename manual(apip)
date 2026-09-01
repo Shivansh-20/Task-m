@@ -288,6 +288,28 @@ connection.commit() = permanently save a transaction's changes.
 
 And SELECT normally doesn't need commit() because you're looking, not changing so no commit here
 
+---------------------------------------------------------------------------
+Database
+   ↓
+quantity + average_buyprice
+   ↓
+row[0] + row[1]
+   ↓
+old_quantity + old_avg_price
+   ↓
+calculate new_quantity + new_avg_price
+   ↓
+UPDATE database
+
+---------------------------
+UPDATE → which table?
+SET    → what columns should change?
+WHERE  → which row(s) should change?
+
+Why NOT a comma before WHERE?
+Because WHERE is not another column assignment.
+----------------------------------------------
+
 #VIVA
 The "one session" interview cheat sheet
 
