@@ -1,4 +1,30 @@
- # workflow
+#architecture        
+                    USER / CLIENT
+                          │
+                          │ HTTP request
+                          ↓
+                    ┌───────────┐
+                    │  FastAPI  │
+                    └─────┬─────┘
+                          │
+              ┌───────────┴───────────┐
+              ↓                       ↓
+         POST /trade             GET /portfolio
+              │                       │
+              ↓                       ↓
+        Pydantic validates       SQLite SELECT
+              │                       │
+              ↓                       ↓
+        Mock stock price         Get all holdings
+              │                       │
+              ↓                       ↓
+       INSERT / UPDATE           Calculate values
+              │                       │
+              └───────────┬───────────┘
+                          ↓
+                     trading.db
+
+# workflow
 Request
   ↓
 "TCS", 10
@@ -20,7 +46,8 @@ new row                     existing quantity
 
 
 #Pyndatic
-"Python type hints describe the expected type, but they don't normally enforce runtime validation. Pydantic uses those type annotations to parse and validate actual data at runtime.
+"Python type hints describe the expected type, but they don't normally enforce runtime validation. 
+Pydantic uses those type annotations to parse and validate actual data at runtime.
 
 You can use Pydantic for output as well.
 
@@ -115,33 +142,208 @@ dict / JSON
 
 This is why Pydantic fits so naturally between APIs and Python code.
 
+#What does `cursor.execute()` do?
 
+Think of `cursor` as the object you use to **send SQL commands to SQLite**.
+
+```python
+cursor.execute(SQL_COMMAND, PARAMETERS)
+```
+
+For example:
+
+```python
+cursor.execute(
+    "SELECT quantity FROM portfolio WHERE ticker = ?",
+    ("AAPL",)
+)
+```
+
+SQLite executes:
+
+```sql
+SELECT quantity FROM portfolio WHERE ticker = ?
+```
+
+with `"AAPL"` as the parameter.
+
+It searches the `portfolio` table for the row where `ticker` is AAPL.
+
+
+
+# the complete flow is:
+
+```text
+cursor.execute()
+       ↓
+Run SQL query
+       ↓
+SQLite finds AAPL
+       ↓
+Result: (10,)
+       ↓
+cursor.fetchone()
+       ↓
+row = (10,)
+       ↓
+row[0] = 10
+```
+There are **two different commas** in your code:
+
+```python
+cursor.execute(
+    "SQL query",     # ← comma separates function arguments
+    (ticker,)        # ← comma makes this a 1-item tuple
+)
+```
+
+They happen to look similar, but they serve different purposes.
+
+**In short:**
+
+```python
+cursor.execute(SQL, parameters)
+```
+
+and
+
+```python
+(ticker,)
+```
+
+means "a tuple containing one parameter."
+# ??????
+> ✅ `?` means "parameter whose value will be supplied separately."
+Python knows the variables**
+Python's `sqlite3` library sees:**
+
+```python
+"INSERT INTO portfolio VALUES (?, ?, ?)"
+```
+
+and:
+
+```python
+(ticker, quantity, price)
+```
+
+It tells SQLite:
+
+> "Here is an SQL statement with 3 parameter placeholders, and here are the 3 values to bind to them."
+SQLite doesn't know or care that the values came from **Python**.
+
+It just sees:
+
+```sql
+VALUES (?, ?, ?)
+```
+
+meaning approximately:
+
+
+parameter 1
+parameter 2
+parameter 3
+```
+Is `?` specific to Python?
+
+**No.**
+
+`?` is a parameter-marker style supported by SQLite and exposed by Python's `sqlite3` interface.
+
+Other programming languages/libraries may use different placeholder syntax.
+
+For example, you might see:
+
+```text
+SQLite/Python sqlite3:    ?
+PostgreSQL libraries:     %s or $1
+
+The exact syntax depends on the **database driver/API**, not simply the programming language.
+python
+cursor.execute(
+    "SELECT quantity FROM portfolio WHERE ticker = ?",
+    (ticker,)
+)
+```
+
+The SQL and the data are kept **separate**. The driver connects the two for you.
+
+JSON approach                  SQLite approach
+
+data.append(...)               INSERT
+find item + modify             UPDATE
+filter list                    SELECT
+write entire file              database handles the row
+
+UPDATE only changes the quantity here. If you later buy the same stock at a different price, 
+a proper portfolio system would need to recalculate the weighted average buy price rather than leaving it at 
+the original price. For this exercise, keeping the mock price as the average is fine.
+
+
+#app.get 
+cursor.execute() = ask the database to perform a SQL operation.
+fetchone() / fetchall() = retrieve results when the operation produces rows.
+connection.commit() = permanently save a transaction's changes.
+
+And SELECT normally doesn't need commit() because you're looking, not changing so no commit here
+
+---------------------------------------------------------------------------
+Database
+   ↓
+quantity + average_buyprice
+   ↓
+row[0] + row[1]
+   ↓
+old_quantity + old_avg_price
+   ↓
+calculate new_quantity + new_avg_price
+   ↓
+UPDATE database
+
+---------------------------
+UPDATE → which table?
+SET    → what columns should change?
+WHERE  → which row(s) should change?
+
+Why NOT a comma before WHERE?
+Because WHERE is not another column assignment.
+----------------------------------------------
 
 #VIVA
 The "one session" interview cheat sheet
 
 If the interviewer asks "What is Pydantic?", say:
 
-Pydantic is a Python library used for data parsing and runtime validation based on Python type annotations. In FastAPI, it is commonly used to define request and response schemas. It validates incoming data, converts compatible values when appropriate, and provides structured validation errors.
+Pydantic is a Python library used for data parsing and runtime validation based on Python type annotations.
+In FastAPI, it is commonly used to define request and response schemas. It validates incoming data,
+converts compatible values when appropriate, and provides structured validation errors.
 
 If they ask "Why FastAPI uses it?"
 
-It allows us to define the expected API schema as a Python model, and FastAPI uses that model to validate request bodies and generate API documentation automatically.
+It allows us to define the expected API schema as a Python model,
+and FastAPI uses that model to validate request bodies and generate API documentation automatically.
 
 "What is BaseModel?"
 
-BaseModel is Pydantic's base class. By inheriting from it, our class gets Pydantic's parsing, validation, and serialization behavior.
+BaseModel is Pydantic's base class. By inheriting from it, our class gets Pydantic's parsing, validation,
+and serialization behavior.
 
 "Pydantic vs type hints?"
 
-Type hints alone generally don't perform runtime validation. Pydantic uses type hints as the basis for runtime parsing and validation.
+Type hints alone generally don't perform runtime validation. 
+Pydantic uses type hints as the basis for runtime parsing and validation.
 
 "Pydantic vs dataclass?"
 
-Dataclasses primarily provide a convenient way to create structured Python objects, whereas Pydantic additionally provides runtime validation, parsing, and serialization, which makes it particularly useful at API boundaries.
+Dataclasses primarily provide a convenient way to create structured Python objects,
+whereas Pydantic additionally provides runtime validation, parsing, and serialization, 
+which makes it particularly useful at API boundaries.
 
 
-SQLite can handle surprisingly large databases. The limitation is often not the database size, but how many users/processes need to access it simultaneously.SQLite allows many readers, but writes are serialized—effectively, only one writer can modify the database at a tim
+SQLite can handle surprisingly large databases. 
+The limitation is often not the database size, but how many users/processes need to access it simultaneously.
+SQLite allows many readers, but writes are serialized—effectively, only one writer can modify the database at a time
 
 
 
