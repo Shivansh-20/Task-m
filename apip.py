@@ -90,7 +90,7 @@ def trade_stock(trade:Trade):
         )
     connection.commit()
     connection.close()
-    # Send JSON response
+    # Send  JSON response usin {} too for dict
     return {                            
         "ticker": ticker,
         "quantity_bought": quantity,
