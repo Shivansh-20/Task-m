@@ -117,15 +117,16 @@ def get_portfolio():
         ticker,quantity,average_buyprice = row
         # Current mock market price
         current_price = prices[ticker]
+        # Current value of this holding
         value = quantity * current_price
 
         stocks.append({
             "ticker":ticker,
             "quantity":quantity,
-            "current_value":current_price,
+            "current_price":current_price,
             "value":value
         })
-        total_value += value
+        total_value += total_value
     return {
         "stocks":stocks,
         "total_value":value
