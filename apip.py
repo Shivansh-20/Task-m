@@ -13,6 +13,7 @@ prices = {
     "HCL":2800
 }
 
+
 #pydantic basemodel
 class Trade(BaseModel):
     ticker: str
