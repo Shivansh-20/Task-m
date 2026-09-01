@@ -72,7 +72,9 @@ def trade_stock(trade:Trade):
         )
         # STOCK ALREADY EXISTS → UPDATE
     else:
-        new_quantity =  + quantity
+        old_quantity = row[0]
+        old_avg_price = row[1]
+        new_quantity = old_quantity + quantity
         new_avg_price = (
     (old_quantity * old_avg_price)
     + (quantity * price)
@@ -81,9 +83,10 @@ def trade_stock(trade:Trade):
         """ 
              update portfolio
              set quantity = ?
+             average_buyprice = ?
              where ticker = ?
         """,
-        (new_quantity,ticker)
+        (new_quantity,new_avg_price,ticker)
         )
     connection.commit()
     connection.close()
