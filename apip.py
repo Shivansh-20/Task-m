@@ -41,14 +41,26 @@ initialiaze_database()
 def trade_stock(trade:Trade):
     ticker = trade.ticker
     quantity = trade.quantity
+    # Check whether stock exists in our mock prices
+    if ticker not in prices: 
+        raise HTTPException( 
+            status_code=400, 
+            detail="Unknown stock ticker" )
+    # Get current mock price
     price = prices[ticker] #store the value in price from dict price of company in ticker
+    # Calculate trade value
     total = quantity * price 
+    # Connect to database 
+    connection = sqlite3.connect("trading.db")
+    cursor = connection.cursor()
 
+# Check whether we already own this stock
     cursor.execute(
         "Select qauntity from portfolio where ticker = ?",
     (ticker,)
 )
     row = cursor.fetchone()  #() are imp , to actually call the function
+    # STOCK DOES NOT EXIST → INSERT
     if row is None:
         cursor.execute(
         """
@@ -57,6 +69,7 @@ def trade_stock(trade:Trade):
         """,
         (ticker,quantity,price)
         )
+        # STOCK ALREADY EXISTS → UPDATE
     else:
         new_quantity = row[0] + quantity
         cursor.execute(
