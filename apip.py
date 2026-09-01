@@ -1,11 +1,28 @@
 import sqlite3
 from pydantic import BaseModel
 from fastapi import FastAPI
-connection = sqlite3.connect("trading.db")
-cursor = connection.cursor()
-# 1. CREATE FASTAPI APPLICATION 
+
+# 1. CREATE FASTAPI APPLICATION
 app = FastAPI()
-cursor.execute("""
+
+# 2. MOCK STOCK PRICES 
+
+prices = {
+    "TCS":3900,
+    "INFO":3000,
+    "HCL":2800
+}
+
+#pydantic basemodel
+class Trade(BaseModel):
+    ticker: str
+    quantity: int
+
+#initiliaze database
+def initialiaze_database():
+    connection = sqlite3.connect("trading.db")
+    cursor = connection.cursor()
+    cursor.execute("""
 CREATE TABLE IF NOT EXISTS portfolio(
 ticker TEXT,
 quantity INT,
@@ -13,22 +30,13 @@ average_buyprice REAL      -- like float , -- -> sql comment, #-> for python
 )
 """
 )
+    connection.commit() #can use "with" for automatic resource free, but not good practise here 
+    connection.close()
 
-connection.commit() #can use "with" for automatic resource free, but not good practise here 
-connection.close()
-# 2. MOCK STOCK PRICES 
- # --------------------------------------------------
-prices = {
-    "TCS":3900,
-    "INFO":3000,
-    "HCL":2800
-}
-class Trade(BaseModel):
-    ticker: str
-    quantity: int
+# Create database/table when program starts
+initialiaze_database()
 
-
-
+# 5. POST /trade
 @app.post("/trade")
 def trade_stock(trade:Trade):
     ticker = trade.ticker
