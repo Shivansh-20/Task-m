@@ -83,7 +83,7 @@ def trade_stock(trade:Trade):
         cursor.execute(
         """ 
              update portfolio
-             set quantity = ?,
+             set quantity = ?,  #comma says one more coming
              average_buyprice = ?
              where ticker = ?
         """,
@@ -91,7 +91,7 @@ def trade_stock(trade:Trade):
         )
     connection.commit()
     connection.close()
-    # Send  JSON response usin {} too for dict
+    # Send  JSON response usind {}  for dict
     return {                            
         "ticker": ticker,
         "quantity_bought": quantity,
