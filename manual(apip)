@@ -1,3 +1,19 @@
+Go to:
+
+http://127.0.0.1:8000/docs
+
+FastAPI automatically gives you an interactive Swagger UI.
+
+You'll see something similar to:
+
+POST /trade
+GET  /portfolio
+
+You can click an endpoint → Try it out → provide input → Execute.
+
+So you don't initially need Postman.
+
+
 #architecture        
                     USER / CLIENT
                           │
