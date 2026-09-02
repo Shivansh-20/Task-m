@@ -49,7 +49,7 @@ def trade_stock(trade:Trade):
             status_code=400, 
             detail="Unknown stock ticker" )
     # Get current mock price
-    price = prices[ticker] #store the value in price from dict price of company in ticker
+    price = prices[ticker] #store the value in  variable price from dict prices of company passed as  ticker
     # Calculate trade value
     total = quantity * price 
     # Connect to database 
