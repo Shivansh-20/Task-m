@@ -58,7 +58,7 @@ def trade_stock(trade:Trade):
 
 # Check whether we already own this stock
     cursor.execute(
-        "Select quantity,average_buyprice from portfolio where ticker = ?",
+        "Select quantity,average_buyprice from portfolio where ticker = ?",  #quantity at index 0 avg at 1
     (ticker,)
 )
     row = cursor.fetchone()  #() are imp , to actually call the function
