@@ -1,6 +1,6 @@
 Go to:
 
-http://127.0.0.1:8000/docs
+http://127.0.0.1:8000/docs #http://localhost:8000/docs
 
 FastAPI automatically gives you an interactive Swagger UI.
 
@@ -12,6 +12,10 @@ GET  /portfolio
 You can click an endpoint → Try it out → provide input → Execute.
 
 So you don't initially need Postman.
+
+                         FastAPI                     Postman                                               Swagger / OpenAPI
+ What it is        Python web framework      API client/testing tool/Test and interact with APIs	   Document and describe APIs
+		
 
 
 #architecture        
