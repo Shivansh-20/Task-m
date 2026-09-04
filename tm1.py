@@ -10,7 +10,7 @@ if sys.argv[1].strip().lower() == "welcome":
 action = sys.argv[1]
 #payload = sys.argv[2]
 print(f"Action ->", {action})
-payload = " ".join(sys.argv[2:])
+payload = " ".join(sys.argv[2:]).strip().lower()
 print("Payload is", payload or None)
 
 with open("data.txt", "r") as file:
@@ -74,7 +74,7 @@ elif action == "list":
             print([items for items in data if items.get("status")== "not done"] or None)
     else:
         for item in data:
-            print(item)
+            print(item or "nothing to show")
 elif action == "delete":
     delete_tasks(data,payload)
 
