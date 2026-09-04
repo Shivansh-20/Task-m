@@ -1,8 +1,12 @@
-import sys
 import json
 from datetime import datetime
 
-
+print("""command words for input
+-- for adding task -> "add" "payload task"
+-- for checking tasks -> "list"  as action - > payload accepted ->  "done" and -> "not done"
+-- for  printing all tasks -> use only "list"
+-- To delete a task - >"delete" "task ID as payload" """)
+import sys
 action = sys.argv[1]
 #payload = sys.argv[2]
 print(f"Action ->", {action})

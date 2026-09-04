@@ -32,7 +32,7 @@ average_buyprice REAL      -- like float , -- -> sql comment, #-> for python
 )
 """
 )
-    connection.commit() #can use "with" for automatic resource free, but not good practise here 
+    connection.commit() #can use "with" statement for automatic resource free, but not good practise here 
     connection.close()
 
 # Create database/table when program starts
@@ -131,7 +131,6 @@ def get_portfolio():
         "stocks":stocks,
         "total_value":total_value
     }
-#The endpoint says "total mock portfolio value",
-#  so we're calculating based on the current mock price, not avg_buy_price
+#  we're calculating based on the current mock price, not avg_buy_price
 
 
