@@ -3,13 +3,13 @@ import json
 from datetime import datetime
 if sys.argv[1].strip().lower() == "welcome":
     print("""Weclome, command words for input
--- for adding task -> "add" "payload task"
+-- for adding task -> "add" ,"task detail"
 -- for checking tasks -> "list"  as action - > payload accepted ->  "done" and -> "not done"
 -- for  printing all tasks -> use only "list"
 -- To delete a task - >"delete" "task ID as payload" """)
-action = sys.argv[1]
+action = sys.argv[1].strip().lower()
 #payload = sys.argv[2]
-print(f"Action ->", {action})
+print(f"Action -> {action}")
 payload = " ".join(sys.argv[2:]).strip().lower()
 print("Payload is", payload or None)
 
@@ -68,13 +68,19 @@ if action == "add":
     print("task added successfully")
 elif action == "list":
     if len(sys.argv) > 2:
-        if sys.argv[2] == "done":
+        if payload == "done":
             print([items for items in data if items.get("status")== "done"] or None)
-        elif sys.argv[2] == "not done":
+        elif payload == "not done":
             print([items for items in data if items.get("status")== "not done"] or None)
-    else:
-        for item in data:
+    elif not payload:
+        if data:
+            for item in data:
+                print(item)
+        else:
+            print("nothing to show")
+        '''for item in data:
             print(item or "nothing to show")
+            For every item in data, print the item; if that particular item is empty, print "nothing to show"'''
 elif action == "delete":
     delete_tasks(data,payload)
 
