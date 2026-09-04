@@ -1,7 +1,7 @@
 import sys
 import json
-#welcome Feature
 from datetime import datetime
+#welcome feature
 if sys.argv[1].strip().lower() == "welcome":
     print("""Weclome, command words for input
 -- for adding task -> "add" ,"task detail"
